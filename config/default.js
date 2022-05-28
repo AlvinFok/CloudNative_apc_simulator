@@ -20,4 +20,8 @@ module.exports = {
       port: 3032,
     },
   },
+  initValue: {
+    FACTOR_THICKNESS: 0.5,
+    FACTOR_MOISTURE: 0.5,
+  },
 };
