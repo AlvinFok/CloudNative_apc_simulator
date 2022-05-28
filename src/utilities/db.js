@@ -16,7 +16,7 @@ const connect = () => {
   for (const [key, value] of Object.entries(dbConfig.initValue)) {
     logger.info(`init default value: ${key}=${value}`);
     // reset or insert init value
-    db.collection('factor_parameters').updateOne(
+    getCollection('factor_parameters').updateOne(
       { name: key },
       { $set: { name: key, value: value } },
       { upsert: true },
@@ -31,8 +31,13 @@ const disconnect = () => {
   client.close();
 }
 
+const getCollection = (collectionName) => {
+  if (!db) return;
+  return db.collection(collectionName);
+}
+
 module.exports = {
-  db,
   connect,
   disconnect,
+  getCollection,
 };
