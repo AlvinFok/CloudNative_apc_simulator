@@ -13,8 +13,6 @@ const measureService = require('./measureService');
 const apcService = require('./apcService');
 const paramsService = require('./paramsService');
 
-db.connect();
-
 let measureHandle = null;
 let paramsHandle = null;
 
@@ -45,17 +43,12 @@ const initGlobalNATSClient = async () => {
   await global.natsClient.addConsumer(nats.stream, `${nats.subject}.params`, `${nats.consumer}_params`);
 };
 
-const initGlobalCache = async () => {
-  global.cache = new NodeCache();
-
-  global.cache.set('FACTOR_THICKNESS', 0.5);
-  global.cache.set('FACTOR_MOISTURE', 0.5);
-};
-
 const run = async () => {
+  // connect to MongoDB
+  db.connect();
+
   // initialize the global resource
   await initGlobalNATSClient();
-  await initGlobalCache();
 
   // run all services
   await apcService.run();
@@ -66,10 +59,7 @@ const run = async () => {
 run();
 
 process.on('SIGINT', async () => {
-  if (global.cache) {
-    await global.cache.close();
-    global.cache = null;
-  }
+  db.disconnect();
 
   if (global.natsClient) {
     await global.natsClient.disconnect();

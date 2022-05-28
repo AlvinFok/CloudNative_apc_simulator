@@ -3,34 +3,36 @@ const MongoClient = require('mongodb').MongoClient;
 const dbConfig = require('config').db;
 
 const client = new MongoClient(dbConfig.url);
-var _db = undefined;
+let db = undefined;
 
-function connect() {
-  if (_db && _db.serverConfig.isConnected()) return;
+const connect = () => {
+  if (db) return db;
   logger.info('MongoDB successfully connected!');
   // connect to MongoDB
   client.connect();
-  _db = client.db('apc');
-  c_parameters = _db.collection('factor_parameters');
+
+  db = client.db(dbConfig.dbName);
+
   for (const [key, value] of Object.entries(dbConfig.initValue)) {
     logger.info(`init default value: ${key}=${value}`);
     // reset or insert init value
-    c_parameters.updateOne(
+    db.collection('factor_parameters').updateOne(
       { name: key },
       { $set: { name: key, value: value } },
       { upsert: true },
     );
   }
+  return db;
 }
 
-function disconnect() {
-  if (!_db || !_db.serverConfig.isConnected()) return;
+const disconnect = () => {
+  if (!db) return;
   logger.info('MongoDB successfully disconnected!');
-  _db.close();
+  client.close();
 }
 
 module.exports = {
+  db,
   connect,
   disconnect,
-  db: _db,
 };
