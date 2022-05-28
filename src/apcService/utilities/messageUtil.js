@@ -1,4 +1,4 @@
-const db = require('../../../utilities/db');
+const db = require('../../utilities/db');
 const logger = require('../../utilities/logger')('APC_SERVICE');
 
 const natsMessageHandler = (message) => {
