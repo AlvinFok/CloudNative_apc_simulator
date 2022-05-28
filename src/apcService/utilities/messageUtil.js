@@ -1,19 +1,21 @@
+const db = require('../../../utilities/db');
 const logger = require('../../utilities/logger')('APC_SERVICE');
 
 const natsMessageHandler = (message) => {
-  if (!global.cache) {
+  const parameters = db.getCollection('factor_parameters');
+  if (!parameters) {
     return;
   }
 
   const msgObj = JSON.parse(message);
-  if (msgObj.type === 'FACTOR_THICKNESS') {
-    global.cache.set('FACTOR_THICKNESS', msgObj.factor);
+  if (msgObj.type === 'FACTOR_THICKNESS' || msgObj.type === 'FACTOR_MOISTURE') {
+    parameters.updateOne(
+      { name: msgObj.type },
+      { $set: { name: msgObj.type, value: msgObj.factor } },
+      { upsert: true },
+    );
 
-    logger.info(`receive thickness factor: ${msgObj.factor}`);
-  } else if (msgObj.type === 'FACTOR_MOISTURE') {
-    global.cache.set('FACTOR_MOISTURE', msgObj.factor);
-
-    logger.info(`receive moisture factor: ${msgObj.factor}`);
+    logger.info(`receive ${msgObj.type} factor: ${msgObj.factor}`);
   }
 };
 
