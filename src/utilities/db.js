@@ -16,7 +16,7 @@ const connect = () => {
   for (const [key, value] of Object.entries(dbConfig.initValue)) {
     logger.info(`init default value: ${key}=${value}`);
     // reset or insert init value
-    getCollection('factor_parameters').updateOne(
+    getCollection('factors').updateOne(
       { name: key },
       { $set: { name: key, value: value } },
       { upsert: true },

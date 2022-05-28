@@ -2,14 +2,14 @@ const db = require('../../utilities/db');
 const logger = require('../../utilities/logger')('APC_SERVICE');
 
 const natsMessageHandler = (message) => {
-  const parameters = db.getCollection('factor_parameters');
-  if (!parameters) {
+  const factors = db.getCollection('factors');
+  if (!factors) {
     return;
   }
 
   const msgObj = JSON.parse(message);
   if (msgObj.type === 'FACTOR_THICKNESS' || msgObj.type === 'FACTOR_MOISTURE') {
-    parameters.updateOne(
+    factors.updateOne(
       { name: msgObj.type },
       { $set: { name: msgObj.type, value: msgObj.factor } },
       { upsert: true },

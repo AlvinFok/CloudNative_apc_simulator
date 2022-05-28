@@ -18,12 +18,12 @@ router.post('/api/v1/process', async (req, res) => {
   });
 
   try {
-    const parameters = db.getCollection('factor_parameters');
-    if (!parameters) {
+    const factors = db.getCollection('factors');
+    if (!factors) {
       throw new Error('The database is not connected.');
     }
-    const tFactor = (await parameters.findOne({name: 'FACTOR_THICKNESS'})).value;
-    const mFactor = (await parameters.findOne({name: 'FACTOR_MOISTURE'})).value;
+    const tFactor = (await factors.findOne({name: 'FACTOR_THICKNESS'})).value;
+    const mFactor = (await factors.findOne({name: 'FACTOR_MOISTURE'})).value;
 
     let data = null;
     if (type === 'SHARON') {
