@@ -1,23 +1,36 @@
+const logger = require('./logger')('DB');
 const MongoClient = require('mongodb').MongoClient;
-const { initValue } = require('config');
+const dbConfig = require('config').db;
 
-MongoClient.connect("mongodb://localhost:27017/apc_simulator", function (err, db) {
-  if(err) throw err;
-  console.log('MongoDB successfully connected!');
-  db.collection("factor_parameters",function(err,collection){
-  	if(err) throw err;
-  	for (const [key, value] of Object.entries(initValue)) {
-		  console.log(`init default value: ${key}=${value}`);
-		  // reset or insert init value
-	  	collection.updateOne(
-	  		{ 'name': key },
-	  		{ $set: { name: key, value: value } },
-	  		{ upsert: true },
-	  	);
-		}
-  });
-});
+const client = new MongoClient(dbConfig.url);
+var _db = undefined;
+
+function connect() {
+  if (_db && _db.serverConfig.isConnected()) return;
+  logger.info('MongoDB successfully connected!');
+  // connect to MongoDB
+  client.connect();
+  _db = client.db('apc');
+  c_parameters = _db.collection('factor_parameters');
+  for (const [key, value] of Object.entries(dbConfig.initValue)) {
+    logger.info(`init default value: ${key}=${value}`);
+    // reset or insert init value
+    c_parameters.updateOne(
+      { name: key },
+      { $set: { name: key, value: value } },
+      { upsert: true },
+    );
+  }
+}
+
+function disconnect() {
+  if (!_db || !_db.serverConfig.isConnected()) return;
+  logger.info('MongoDB successfully disconnected!');
+  _db.close();
+}
 
 module.exports = {
-  db: MongoClient,
+  connect,
+  disconnect,
+  db: _db,
 };

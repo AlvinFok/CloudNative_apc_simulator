@@ -7,10 +7,13 @@ const NodeCache = require('node-cache');
 
 const logger = require('./utilities/logger')('INDEX');
 const NATSClient = require('./utilities/natsClient');
+const db = require('./utilities/db');
 
 const measureService = require('./measureService');
 const apcService = require('./apcService');
 const paramsService = require('./paramsService');
+
+db.connect();
 
 let measureHandle = null;
 let paramsHandle = null;

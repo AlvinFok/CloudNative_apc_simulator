@@ -20,8 +20,11 @@ module.exports = {
       port: 3032,
     },
   },
-  initValue: {
-    FACTOR_THICKNESS: 0.5,
-    FACTOR_MOISTURE: 0.5,
+  db: {
+    url: "mongodb://localhost:27017/apc_simulator",
+    initValue: {
+      FACTOR_THICKNESS: 0.5,
+      FACTOR_MOISTURE: 0.5,
+    },
   },
 };
