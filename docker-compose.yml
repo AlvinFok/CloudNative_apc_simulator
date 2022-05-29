@@ -1,5 +1,25 @@
 version: '3'
 services:
+  my-prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--log.level=debug'
+    ports:
+      # Map port 9090 inside the container to port 19090 on the host
+      - 19090:9090
+
+  my-grafana:
+    image: grafana/grafana:8.3.6
+    volumes:
+      - ./datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    depends_on:
+      - my-prometheus
+    ports:
+      - 13000:3000
+
   mongodb:
     container_name: mongo
     image: mongo:5.0
