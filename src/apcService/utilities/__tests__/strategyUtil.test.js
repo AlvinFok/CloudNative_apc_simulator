@@ -1,4 +1,4 @@
-const { filetStrategy, sharonStrategy, defaultStrategy, strategyOfType } = require('../strategyUtil');
+const { filetStrategy, sharonStrategy, defaultStrategy, chuckStrategy, strategyOfType } = require('../strategyUtil');
 
 describe('Module strategyUtil', () => {
   const fakeThickness = 2.0;
@@ -21,6 +21,15 @@ describe('Module strategyUtil', () => {
     expect(res).toStrictEqual({
       period: (fakeMoisture * fakeMFactor).toFixed(2),
       temperature: 50,
+    });
+  });
+
+  it('Method chuckStrategy', () => {
+    const res = chuckStrategy({ moisture: fakeMoisture, mFactor: fakeMFactor, thickness: fakeThickness });
+
+    expect(res).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: (fakeThickness * 2).toFixed(2),
     });
   });
 
@@ -63,6 +72,18 @@ describe('Module strategyUtil', () => {
     expect(strategy(args)).toStrictEqual({
       period: (fakeMoisture * fakeMFactor).toFixed(2),
       temperature: 100,
+    });
+
+    strategy = strategyOfType('TENDER_LOIN');
+    expect(strategy(args)).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: 100,
+    });
+
+    strategy = strategyOfType('CHUCK');
+    expect(strategy(args)).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: (fakeThickness * 2).toFixed(2),
     });
   });
 });

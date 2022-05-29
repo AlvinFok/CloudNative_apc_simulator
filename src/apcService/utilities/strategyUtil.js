@@ -1,6 +1,6 @@
 const defaultStrategy = ({
-  moisture = 0,
-  mFactor = 0,
+  moisture,
+  mFactor,
 }) => {
   const period = (moisture * mFactor).toFixed(2);
 
@@ -11,8 +11,8 @@ const defaultStrategy = ({
 };
 
 const sharonStrategy = ({
-  thickness = 0,
-  tFactor = 0,
+  thickness,
+  tFactor,
 }) => {
   const temperature = (thickness * tFactor).toFixed(2);
 
@@ -23,8 +23,8 @@ const sharonStrategy = ({
 };
 
 const filetStrategy = ({
-  moisture = 0,
-  mFactor = 0,
+  moisture,
+  mFactor,
 }) => {
   const period = (moisture * mFactor).toFixed(2);
 
@@ -34,11 +34,27 @@ const filetStrategy = ({
   };
 };
 
+const chuckStrategy = ({
+  thickness,
+  moisture,
+  mFactor,
+}) => {
+  const period = (moisture * mFactor).toFixed(2);
+  const temperature = (thickness * 2).toFixed(2);
+
+  return {
+    period,
+    temperature,
+  };
+};
+
 const strategyOfType = (type) => {
   if (type === 'SHARON') {
     return sharonStrategy;
   } else if (type === 'FILET') {
     return filetStrategy;
+  } else if(type === 'CHUCK'){
+    return chuckStrategy;
   }
   else {
     return defaultStrategy;
@@ -49,5 +65,6 @@ module.exports = {
   defaultStrategy,
   sharonStrategy,
   filetStrategy,
+  chuckStrategy,
   strategyOfType
 };
