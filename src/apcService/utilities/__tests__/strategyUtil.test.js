@@ -1,4 +1,4 @@
-const { sharonStrategy, defaultStrategy } = require('../strategyUtil');
+const { filetStrategy, sharonStrategy, defaultStrategy, strategyOfType } = require('../strategyUtil');
 
 describe('Module strategyUtil', () => {
   const fakeThickness = 2.0;
@@ -7,7 +7,7 @@ describe('Module strategyUtil', () => {
   const fakeMFactor = 0.5;
 
   it('Method sharonStrategy', () => {
-    const res = sharonStrategy(fakeThickness, fakeTFactor);
+    const res = sharonStrategy({ thickness: fakeThickness, tFactor: fakeTFactor });
 
     expect(res).toStrictEqual({
       period: 20,
@@ -15,10 +15,52 @@ describe('Module strategyUtil', () => {
     });
   });
 
-  it('Method defaultStrategy', () => {
-    const res = defaultStrategy(fakeMoisture, fakeMFactor);
+  it('Method filetStrategy', () => {
+    const res = filetStrategy({ moisture: fakeMoisture, mFactor: fakeMFactor });
 
     expect(res).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: 50,
+    });
+  });
+
+  it('Method defaultStrategy', () => {
+    const res = defaultStrategy({ moisture: fakeMoisture, mFactor: fakeMFactor });
+
+    expect(res).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: 100,
+    });
+  });
+
+  it('Method strategyOfType', () => {
+    let args = {
+      thickness: fakeThickness,
+      tFactor: fakeTFactor,
+      moisture: fakeMoisture,
+      mFactor: fakeMFactor
+    };
+
+    let strategy = strategyOfType('SHARON');
+    expect(strategy(args)).toStrictEqual({
+      period: 20,
+      temperature: (fakeThickness * fakeTFactor).toFixed(2),
+    });
+
+    strategy = strategyOfType('RIB_EYE');
+    expect(strategy(args)).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: 100,
+    });
+
+    strategy = strategyOfType('FILET');
+    expect(strategy(args)).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: 50,
+    });
+
+    strategy = strategyOfType('NEW_YORK');
+    expect(strategy(args)).toStrictEqual({
       period: (fakeMoisture * fakeMFactor).toFixed(2),
       temperature: 100,
     });
