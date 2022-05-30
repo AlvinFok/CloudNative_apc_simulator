@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run tests
-        run: npm test -- --converage
+        run: npm test -- --coverage
       - name: stop docker containers
         run: docker-compose down
       - name: Process jest results with default
