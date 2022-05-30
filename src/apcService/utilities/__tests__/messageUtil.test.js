@@ -32,3 +32,8 @@ describe('Module messageUtil', () => {
     expect((await factors.findOne({name: 'FAKE_TYPE'}))).toBe(null);
   });
 });
+
+afterAll(done => {
+  db.disconnect();
+  done();
+});
