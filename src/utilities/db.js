@@ -7,11 +7,11 @@ let db = undefined;
 
 const connect = () => {
   if (db) return db;
-  logger.info('MongoDB successfully connected!');
   // connect to MongoDB
   client.connect();
-
   db = client.db(dbConfig.dbName);
+
+  logger.info('MongoDB successfully connected!');
 
   for (const [key, value] of Object.entries(dbConfig.initValue)) {
     logger.info(`init default value: ${key}=${value}`);
@@ -32,7 +32,10 @@ const disconnect = () => {
 }
 
 const getCollection = (collectionName) => {
-  if (!db) return;
+  if (!db) {
+    logger.error('The database is not connected, you should call `connect()` first.');
+    return;
+  }
   return db.collection(collectionName);
 }
 
