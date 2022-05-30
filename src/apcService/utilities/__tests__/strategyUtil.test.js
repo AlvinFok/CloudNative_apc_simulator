@@ -43,13 +43,6 @@ describe('Module strategyUtil', () => {
   });
 
   it('Method strategyOfType', () => {
-    let args = {
-      thickness: fakeThickness,
-      tFactor: fakeTFactor,
-      moisture: fakeMoisture,
-      mFactor: fakeMFactor
-    };
-
     expect(strategyOfType('SHARON')).toEqual(sharonStrategy);
     expect(strategyOfType('RIB_EYE')).toEqual(defaultStrategy);
     expect(strategyOfType('FILET')).toEqual(filetStrategy);
