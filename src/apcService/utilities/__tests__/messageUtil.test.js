@@ -2,6 +2,7 @@ const { natsMessageHandler } = require('../messageUtil');
 const db = require('../../../utilities/db');
 
 beforeAll(async () => {
+  db.connect();
   // wait for db init
   await new Promise(r => setTimeout(r, 3000));
 });
@@ -9,8 +10,6 @@ beforeAll(async () => {
 describe('Module messageUtil', () => {
   const fakeType = 'FACTOR_THICKNESS';
   const fakeFactor = 0.5;
-
-  db.connect();
 
   it('Method natsMessageHandler for success', async () => {
     const factors = db.getCollection('factors');
