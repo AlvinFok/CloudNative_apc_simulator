@@ -15,7 +15,8 @@ describe('Module messageUtil', () => {
         factor: fakeFactor,
       })
     );
-
+    // wait for db init
+    await new Promise(r => setTimeout(r, 3000));
     expect((await factors.findOne({name: fakeType}))?.value).toBe(fakeFactor);
   });
 
@@ -27,7 +28,8 @@ describe('Module messageUtil', () => {
         factor: fakeFactor,
       })
     );
-
+    // wait for db init
+    await new Promise(r => setTimeout(r, 3000));
     expect((await factors.findOne({name: fakeType})).value).toBe(fakeFactor);
     expect((await factors.findOne({name: 'FAKE_TYPE'}))).toBe(null);
   });
