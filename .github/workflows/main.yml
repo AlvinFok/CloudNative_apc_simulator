@@ -23,7 +23,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           results-file: 'result.json'
-      - name: Change permission of mongodb
+      - name: Change permission of whole project
         run: sudo chown -R $USER:$USER /home/runner/work/CloudNative_apc_simulator/CloudNative_apc_simulator/
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
