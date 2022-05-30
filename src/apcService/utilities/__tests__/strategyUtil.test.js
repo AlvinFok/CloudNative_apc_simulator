@@ -50,40 +50,11 @@ describe('Module strategyUtil', () => {
       mFactor: fakeMFactor
     };
 
-    let strategy = strategyOfType('SHARON');
-    expect(strategy(args)).toStrictEqual({
-      period: 20,
-      temperature: (fakeThickness * fakeTFactor).toFixed(2),
-    });
-
-    strategy = strategyOfType('RIB_EYE');
-    expect(strategy(args)).toStrictEqual({
-      period: (fakeMoisture * fakeMFactor).toFixed(2),
-      temperature: 100,
-    });
-
-    strategy = strategyOfType('FILET');
-    expect(strategy(args)).toStrictEqual({
-      period: (fakeMoisture * fakeMFactor).toFixed(2),
-      temperature: 50,
-    });
-
-    strategy = strategyOfType('NEW_YORK');
-    expect(strategy(args)).toStrictEqual({
-      period: (fakeMoisture * fakeMFactor).toFixed(2),
-      temperature: 100,
-    });
-
-    strategy = strategyOfType('TENDER_LOIN');
-    expect(strategy(args)).toStrictEqual({
-      period: (fakeMoisture * fakeMFactor).toFixed(2),
-      temperature: 100,
-    });
-
-    strategy = strategyOfType('CHUCK');
-    expect(strategy(args)).toStrictEqual({
-      period: (fakeMoisture * fakeMFactor).toFixed(2),
-      temperature: (fakeThickness * 2).toFixed(2),
-    });
+    expect(strategyOfType('SHARON')).toEqual(sharonStrategy);
+    expect(strategyOfType('RIB_EYE')).toEqual(defaultStrategy);
+    expect(strategyOfType('FILET')).toEqual(filetStrategy);
+    expect(strategyOfType('NEW_YORK')).toEqual(defaultStrategy);
+    expect(strategyOfType('TENDER_LOIN')).toEqual(defaultStrategy);
+    expect(strategyOfType('CHUCK')).toEqual(chuckStrategy);
   });
 });
