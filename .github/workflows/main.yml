@@ -1,6 +1,5 @@
 name: CI
-on:
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   main:
@@ -24,6 +23,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           results-file: 'result.json'
+      - name: Change permission of whole project
+        run: sudo chown -R $USER:$USER /home/runner/work/CloudNative_apc_simulator/CloudNative_apc_simulator/
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          fail_ci_if_error: true
+          

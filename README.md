@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/AlvinFok/CloudNative_apc_simulator/branch/main/graph/badge.svg?token=RHEL9H8XBP)](https://codecov.io/gh/AlvinFok/CloudNative_apc_simulator)
 # User Guide
 
 - ## Environment Settings
