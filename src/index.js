@@ -12,8 +12,45 @@ const measureService = require('./measureService');
 const apcService = require('./apcService');
 const paramsService = require('./paramsService');
 
+const express = require('express')
+const Prometheus = require('prom-client')
+
 let measureHandle = null;
 let paramsHandle = null;
+
+const app = express()
+const port = 8123
+const metricsInterval = Prometheus.collectDefaultMetrics()
+const counter = new Prometheus.Counter({
+  name: 'myapp_requests',
+  help: 'Demo counter metric to record request count',
+  labelNames: ['factor'],
+});
+
+app.get('/thickness', (req, res, next) => {
+  counter.labels("thickness").inc();
+})
+
+app.get('/moisture', (req, res, next) => {
+  counter.labels("moisture").inc();
+})
+
+app.get('/metrics', (req, res) => {
+  res.set('Content-Type', Prometheus.register.contentType)
+  res.end(Prometheus.register.metrics())
+})
+
+// Error handler
+app.use((err, req, res, next) => {
+  res.statusCode = 500
+  // Do not expose your error in production
+  res.json({ error: err.message })
+  next()
+})
+
+const server = app.listen(port, () => {
+  console.log(`listening on port ${port}`)
+})
 
 const initGlobalNATSClient = async () => {
   // instantiate the nats client
@@ -80,6 +117,16 @@ process.on('SIGINT', async () => {
   if (measureHandle) {
     clearInterval(measureHandle);
   }
+
+  if(metricsInterval) {
+    clearInterval(metricsInterval)
+  }
+  
+  server.close((err) => {
+    if (err) {
+      console.error(err)
+    }
+  })
 
   process.exit();
 });
