@@ -19,7 +19,7 @@ describe('Module messageUtil', () => {
         factor: fakeFactor,
       })
     );
-    
+
     expect((await factors.findOne({name: fakeType}))?.value).toBe(fakeFactor);
   });
 
@@ -31,7 +31,7 @@ describe('Module messageUtil', () => {
         factor: fakeFactor,
       })
     );
-    
+
     expect((await factors.findOne({name: fakeType})).value).toBe(fakeFactor);
     expect((await factors.findOne({name: 'FAKE_TYPE'}))).toBe(null);
   });
