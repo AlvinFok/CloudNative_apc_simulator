@@ -26,13 +26,20 @@ const counter = new Prometheus.Counter({
   help: 'Demo counter metric to record request count',
   labelNames: ['factor'],
 });
+const gauge = new Prometheus.Gauge({ 
+  name: 'myapp_factor',
+  help: 'factor value',
+  labelNames: ['factor'] ,
+});
 
 app.get('/thickness', (req, res, next) => {
   counter.labels("thickness").inc();
+  gauge.labels("thickness").set(parseFloat(req.query.value))
 })
 
 app.get('/moisture', (req, res, next) => {
   counter.labels("moisture").inc();
+  gauge.labels("moisture").set(parseFloat(req.query.value))
 })
 
 app.get('/metrics', (req, res) => {

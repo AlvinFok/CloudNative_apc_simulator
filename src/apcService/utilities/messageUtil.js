@@ -11,15 +11,15 @@ const natsMessageHandler = (message) => {
     global.cache.set('FACTOR_THICKNESS', msgObj.factor);
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8123/thickness");
-    xhr.send();
+    xhr.open("GET", "http://localhost:8123/thickness?value="+msgObj.factor);
+    xhr.send(msgObj.factor.toString());
 
     logger.info(`receive thickness factor: ${msgObj.factor}`);
   } else if (msgObj.type === 'FACTOR_MOISTURE') {
     global.cache.set('FACTOR_MOISTURE', msgObj.factor);
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:8123/moisture");
+    xhr.open("GET", "http://localhost:8123/moisture?value="+msgObj.factor);
     xhr.send();
 
     logger.info(`receive moisture factor: ${msgObj.factor}`);
