@@ -26,7 +26,7 @@ router.post('/api/v1/process', async (req, res) => {
     const mFactor = (await factors.findOne({name: 'FACTOR_MOISTURE'})).value;
 
     let strategy = strategyOfType(type);
-    let data = strategy(thickness, tFactor, moisture, mFactor);
+    let data = strategy({thickness, tFactor, moisture, mFactor});
 
     logger.end(handle, { tFactor, mFactor, ...data }, `process (${id}) of APC has completed`);
 
