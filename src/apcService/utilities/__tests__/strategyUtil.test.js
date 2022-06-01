@@ -1,4 +1,4 @@
-const { sharonStrategy, defaultStrategy } = require('../strategyUtil');
+const { filetStrategy, sharonStrategy, defaultStrategy, chuckStrategy, strategyOfType } = require('../strategyUtil');
 
 describe('Module strategyUtil', () => {
   const fakeThickness = 2.0;
@@ -7,7 +7,7 @@ describe('Module strategyUtil', () => {
   const fakeMFactor = 0.5;
 
   it('Method sharonStrategy', () => {
-    const res = sharonStrategy(fakeThickness, fakeTFactor);
+    const res = sharonStrategy({ thickness: fakeThickness, tFactor: fakeTFactor });
 
     expect(res).toStrictEqual({
       period: 20,
@@ -15,12 +15,39 @@ describe('Module strategyUtil', () => {
     });
   });
 
+  it('Method filetStrategy', () => {
+    const res = filetStrategy({ moisture: fakeMoisture, mFactor: fakeMFactor });
+
+    expect(res).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: 50,
+    });
+  });
+
+  it('Method chuckStrategy', () => {
+    const res = chuckStrategy({ moisture: fakeMoisture, mFactor: fakeMFactor, thickness: fakeThickness });
+
+    expect(res).toStrictEqual({
+      period: (fakeMoisture * fakeMFactor).toFixed(2),
+      temperature: (fakeThickness * 2).toFixed(2),
+    });
+  });
+
   it('Method defaultStrategy', () => {
-    const res = defaultStrategy(fakeMoisture, fakeMFactor);
+    const res = defaultStrategy({ moisture: fakeMoisture, mFactor: fakeMFactor });
 
     expect(res).toStrictEqual({
       period: (fakeMoisture * fakeMFactor).toFixed(2),
       temperature: 100,
     });
+  });
+
+  it('Method strategyOfType', () => {
+    expect(strategyOfType('SHARON')).toEqual(sharonStrategy);
+    expect(strategyOfType('RIB_EYE')).toEqual(defaultStrategy);
+    expect(strategyOfType('FILET')).toEqual(filetStrategy);
+    expect(strategyOfType('NEW_YORK')).toEqual(defaultStrategy);
+    expect(strategyOfType('TENDER_LOIN')).toEqual(defaultStrategy);
+    expect(strategyOfType('CHUCK')).toEqual(chuckStrategy);
   });
 });

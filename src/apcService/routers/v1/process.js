@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { defaultStrategy, sharonStrategy } = require('../../utilities/strategyUtil');
+const { strategyOfType } = require('../../utilities/strategyUtil');
 
 const db = require('../../../utilities/db');
 const logger = require('../../../utilities/logger')('APC_SERVICE');
@@ -25,12 +25,8 @@ router.post('/api/v1/process', async (req, res) => {
     const tFactor = (await factors.findOne({name: 'FACTOR_THICKNESS'})).value;
     const mFactor = (await factors.findOne({name: 'FACTOR_MOISTURE'})).value;
 
-    let data = null;
-    if (type === 'SHARON') {
-      data = sharonStrategy(thickness, tFactor);
-    } else {
-      data = defaultStrategy(moisture, mFactor);
-    }
+    let strategy = strategyOfType(type);
+    let data = strategy(thickness, tFactor, moisture, mFactor);
 
     logger.end(handle, { tFactor, mFactor, ...data }, `process (${id}) of APC has completed`);
 
