@@ -12,7 +12,7 @@ const natsMessageHandler = (message) => {
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "http://localhost:8123/thickness?value="+msgObj.factor);
-    xhr.send(msgObj.factor.toString());
+    xhr.send();
 
     logger.info(`receive thickness factor: ${msgObj.factor}`);
   } else if (msgObj.type === 'FACTOR_MOISTURE') {
