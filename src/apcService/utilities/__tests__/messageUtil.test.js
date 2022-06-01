@@ -1,18 +1,14 @@
 const { natsMessageHandler } = require('../messageUtil');
+const db = require('../../../utilities/db');
 
 describe('Module messageUtil', () => {
   const fakeType = 'FACTOR_THICKNESS';
   const fakeFactor = 0.5;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  db.connect();
 
   it('Method natsMessageHandler for success', async () => {
-    global.cache = {
-      set: jest.fn().mockReturnValueOnce(true),
-    };
-
+    const factors = db.getCollection('factors');
     natsMessageHandler(
       JSON.stringify({
         type: fakeType,
@@ -20,14 +16,11 @@ describe('Module messageUtil', () => {
       })
     );
 
-    expect(global.cache.set).toHaveBeenCalledWith(fakeType, fakeFactor);
+    expect((await factors.findOne({name: fakeType}))?.value).toBe(fakeFactor);
   });
 
   it('Method natsMessageHandler for failed', async () => {
-    global.cache = {
-      set: jest.fn().mockReturnValueOnce(true),
-    };
-
+    const factors = db.getCollection('factors');
     natsMessageHandler(
       JSON.stringify({
         type: 'FAKE_TYPE',
@@ -35,6 +28,7 @@ describe('Module messageUtil', () => {
       })
     );
 
-    expect(global.cache.set).toBeCalledTimes(0);
+    expect((await factors.findOne({name: fakeType})).value).toBe(fakeFactor);
+    expect((await factors.findOne({name: 'FAKE_TYPE'}))).toBe(null);
   });
 });

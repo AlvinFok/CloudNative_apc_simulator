@@ -2,6 +2,7 @@ const express = require('express');
 
 const { defaultStrategy, sharonStrategy } = require('../../utilities/strategyUtil');
 
+const db = require('../../../utilities/db');
 const logger = require('../../../utilities/logger')('APC_SERVICE');
 
 const router = express.Router();
@@ -17,11 +18,12 @@ router.post('/api/v1/process', async (req, res) => {
   });
 
   try {
-    if (!global.cache) {
-      throw new Error('the global cache is not existed');
+    const factors = db.getCollection('factors');
+    if (!factors) {
+      throw new Error('The database is not connected.');
     }
-    const tFactor = global.cache.get('FACTOR_THICKNESS');
-    const mFactor = global.cache.get('FACTOR_MOISTURE');
+    const tFactor = (await factors.findOne({name: 'FACTOR_THICKNESS'})).value;
+    const mFactor = (await factors.findOne({name: 'FACTOR_MOISTURE'})).value;
 
     let data = null;
     if (type === 'SHARON') {
