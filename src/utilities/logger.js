@@ -4,11 +4,15 @@ const NodeCache = require('node-cache');
 const { createLogger, format, transports } = require('winston');
 const { timestamp, printf, combine, splat, label } = format;
 
+const { db: { url: dbUrl, dbName }} = require('config');
+require('winston-mongodb');
+
 const customFormat = printf(({ timestamp, label, message, level, ...metadata }) => {
   return `[${label}] | ${timestamp} | ${level} | ${message} | ${JSON.stringify(metadata)}`;
 });
 
 const func = (loggerLabel) => {
+
   const logger = createLogger({
     level: 'debug',
     format: combine(
@@ -20,7 +24,7 @@ const func = (loggerLabel) => {
       splat(),
       customFormat
     ),
-    transports: [new transports.Console({ level: 'debug' })],
+    transports: [new transports.MongoDB({db: `${dbUrl}${dbName}`, level: 'debug'}), new transports.Console({ level: 'debug' })],
   });
 
   logger.cache = new NodeCache();
