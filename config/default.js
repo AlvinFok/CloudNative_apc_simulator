@@ -28,4 +28,5 @@ module.exports = {
       FACTOR_MOISTURE: 0.5,
     },
   },
+  env: typeof(process.env.NODE_ENV) == 'string' ? process.env.NODE_ENV : 'dev',
 };
