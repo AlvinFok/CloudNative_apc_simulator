@@ -12,7 +12,6 @@ const customFormat = printf(({ timestamp, label, message, level, ...metadata }) 
 });
 
 const func = (loggerLabel) => {
-
   const logger = createLogger({
     level: 'debug',
     format: combine(
