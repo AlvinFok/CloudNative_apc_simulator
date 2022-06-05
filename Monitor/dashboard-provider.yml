@@ -8,3 +8,11 @@ providers:
   options:
     # <string, required> path to dashboard files on disk.
     path: /var/lib/grafana/dashboards/demo
+  
+- name: 'Steak Production per 1H'
+  folder: Steak_Production_1H
+  type: file
+  allowUiUpdates: false
+  options:
+    # <string, required> path to dashboard files on disk.
+    path: /var/lib/grafana/dashboards/Steak_Production_1H

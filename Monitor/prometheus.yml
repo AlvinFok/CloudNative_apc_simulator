@@ -11,4 +11,4 @@ scrape_configs:
     static_configs:
       # 指定 compose file 的 service 名稱 (my-prometheus), 以及 container port 9090
       # 預設會定期 scrape 這個 url - http://my-prometheus:9090/metrics
-      - targets: [prometheus:9090, host.docker.internal:10000]
+      - targets: [prometheus:9090, host.docker.internal:8001]

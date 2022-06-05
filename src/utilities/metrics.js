@@ -41,8 +41,8 @@ const run = () =>{
         return res.send(await client.register.metrics());
     });
 
-    app.listen(10000, ()=>{
-        logger.info("Metrics server started at http://localhost:10000/metrics")
+    app.listen(8001, ()=>{
+        logger.info("Metrics server started at http://localhost:8001/metrics")
     });
 }
 

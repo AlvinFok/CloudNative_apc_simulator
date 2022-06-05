@@ -54,23 +54,19 @@ services:
       - ./Monitor/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-
     ports:
       # Map port 9090 inside the container to port 19090 on the host
       - 19090:9090
 
-  my-grafana:
+  grafana:
     image: grafana/grafana:8.3.6
     volumes:
       - ./Monitor/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./Monitor/dashboard-provider.yml:/etc/grafana/provisioning/dashboards/dashboard-provider.yml
-      - ./Monitor/dashboard-prometheus.json:/var/lib/grafana/dashboards/demo/dashboard-prometheus.json
-      - ./Monitor/dashboard-prometheus-from-commnunity.json:/var/lib/grafana/dashboards/demo/dashboard-prometheus-from-community.json
+      - ./Monitor/Dashboard:/var/lib/grafana/dashboards
+      
     depends_on:
       - prometheus
-
-    networks:
-      - mongodb_nats
     ports:
       - 13000:3000
 
