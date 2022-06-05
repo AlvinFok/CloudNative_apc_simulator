@@ -24,7 +24,13 @@ const httpRequestTimer = new client.Histogram({
     help: 'Duration of HTTP requests in seconds',
     labelNames: ['method', 'route', 'code'],
     buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10] // 0.1 to 10 seconds
-  });
+});
+
+const steakTypeCounter = new client.Counter({
+    name: 'steak_type_counter',
+    help: 'Counter of each type of steak',
+    labelNames: ['type', 'success'],
+});
 
 const run = () =>{
     const collectDefaultMetrics = client.collectDefaultMetrics;
@@ -36,7 +42,7 @@ const run = () =>{
     });
 
     app.listen(10000, ()=>{
-        logger.info("Metrics server started at http://localhost:10000")
+        logger.info("Metrics server started at http://localhost:10000/metrics")
     });
 }
 
@@ -44,5 +50,16 @@ module.exports = {
     run,
     restResponseTimeHistogram,
     databaseResponseTimeHistogram,
-    httpRequestTimer
+    httpRequestTimer,
+    steakTypeCounter
     };
+
+
+
+
+// const Gauge = require('../').Gauge;
+const g = new client.Gauge({
+    name: 'test_gauge',
+    help: 'Example of a gauge',
+    labelNames: ['method', 'code'],
+});
