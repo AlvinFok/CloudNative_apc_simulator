@@ -4,7 +4,7 @@
   "description": "the project to simulate the APC scenario",
   "main": "index.js",
   "scripts": {
-    "test": "jest --json --outputFile=result.json"
+    "test": "jest --json --outputFile=result.json --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "nats": "^2.6.1",
     "node-cache": "^5.1.2",
     "uuid": "^8.3.2",
-    "winston": "^3.7.2"
+    "winston": "^3.7.2",
+    "winston-mongodb": "^5.0.7"
   }
 }
