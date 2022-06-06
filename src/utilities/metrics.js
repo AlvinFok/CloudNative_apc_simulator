@@ -5,19 +5,11 @@ const logger = require('./logger')('METRICS');
 
 const app = express();
 
-const restResponseTimeHistogram = new client.Histogram({
-    name: 'rest_response_time_duration_seconds',
-    help: 'REST API response time in second',
-    labelNames: ['method', 'route', 'status_code']
-});
-
 const databaseResponseTimeHistogram = new client.Histogram({
     name: 'db_response_time_duration_seconds',
     help: 'Database API response time in second',
     labelNames: ['operation', 'success']
 });
-
-
 
 const httpRequestTimer = new client.Histogram({
     name: 'http_request_duration_seconds',
@@ -26,11 +18,18 @@ const httpRequestTimer = new client.Histogram({
     buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10] // 0.1 to 10 seconds
 });
 
+const natClientTimer = new client.Histogram({
+    name: 'nat_client_operation_duration_seconds',
+    help: 'Duration of nat client operation in seconds',
+    labelNames: ['method', 'success']
+})
+
 const steakTypeCounter = new client.Counter({
     name: 'steak_type_counter',
     help: 'Counter of each type of steak',
     labelNames: ['type', 'success'],
 });
+
 
 const run = () =>{
     const collectDefaultMetrics = client.collectDefaultMetrics;
@@ -48,10 +47,11 @@ const run = () =>{
 
 module.exports = {
     run,
-    restResponseTimeHistogram,
+    
     databaseResponseTimeHistogram,
     httpRequestTimer,
-    steakTypeCounter
+    steakTypeCounter,
+    natClientTimer
     };
 
 
