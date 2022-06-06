@@ -27,7 +27,11 @@ const func = (loggerLabel) => {
   }
 
   if (env == 'dev') {
-    option.transports.push(new transports.MongoDB({db: `${dbUrl}${dbName}`, level: 'debug'}));
+    option.transports.push(new transports.MongoDB({
+      db: `${dbUrl}${dbName}`,
+      level: 'debug',
+      tryReconnect: true,
+    }));
   }
 
   const logger = createLogger(option);
