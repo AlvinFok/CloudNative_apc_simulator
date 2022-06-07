@@ -12,6 +12,7 @@ const db = require('./utilities/db');
 const measureService = require('./measureService');
 const apcService = require('./apcService');
 const paramsService = require('./paramsService');
+const metrics = require('./utilities/metrics')
 
 let measureHandle = null;
 let paramsHandle = null;
@@ -54,6 +55,7 @@ const run = async () => {
   await apcService.run();
   paramsHandle = await paramsService.run();
   measureHandle = await measureService.run();
+  metrics.run();
 };
 
 run();
