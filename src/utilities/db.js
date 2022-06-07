@@ -2,7 +2,7 @@ const logger = require('./logger')('DB');
 const MongoClient = require('mongodb').MongoClient;
 const dbConfig = require('config').db;
 
-const client = new MongoClient(dbConfig.url);
+const client = new MongoClient(process.env.MONGODB_SERVICE_CONNECTION || dbConfig.url);
 let db = undefined;
 
 const connect = () => {
