@@ -23,4 +23,4 @@ spec:
             - name: NATS_SERVICE_CONNECTION
               value: 'nats-server:4222'
             - name: MONGODB_SERVICE_CONNECTION
-              value: 'mongodb:27017'
+              value: 'mongodb://mongodb:27017'
