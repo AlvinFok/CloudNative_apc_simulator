@@ -4,7 +4,7 @@ const NodeCache = require('node-cache');
 const { createLogger, format, transports } = require('winston');
 const { timestamp, printf, combine, splat, label } = format;
 
-const { db: { url: dbUrl, dbName }, env} = require('config');
+const { db, env} = require('config');
 require('winston-mongodb');
 
 const customFormat = printf(({ timestamp, label, message, level, ...metadata }) => {
@@ -27,8 +27,9 @@ const func = (loggerLabel) => {
   }
 
   if (env == 'dev') {
+    let dbUrl = process.env.MONGODB_SERVICE_CONNECTION || db.url;
     option.transports.push(new transports.MongoDB({
-      db: `${dbUrl}${dbName}`,
+      db: `${dbUrl}${db.dbName}`,
       level: 'debug',
       tryReconnect: true,
     }));
